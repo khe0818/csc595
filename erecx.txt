@@ -1,0 +1,125 @@
+void Remove(Node *&pHead, int row, int col)
+{
+	// get col num first
+	Node *pTmp = pHead;
+	int rowNum = 0;
+	int colNum = 0;
+
+	while (pTmp != nullptr) {
+		pTmp = pTmp->pEast;
+		colNum++;
+	}
+
+	bool toEast = true;
+	pTmp = pHead;
+	// get rowNum
+	while (pTmp != nullptr) {
+		if (toEast == true) {
+			if (pTmp->pEast != nullptr) {
+				pTmp = pTmp->pEast;
+			}
+			else {
+				pTmp = pTmp->pSouth;
+				toEast = false;
+				rowNum++;
+			}
+		}
+		else {
+			if (pTmp->pWest != nullptr) {
+				pTmp = pTmp->pWest;
+			}
+			else {
+				pTmp = pTmp->pSouth;
+				toEast = true;
+				rowNum++;
+			}
+		}
+	}
+
+	pTmp = pHead;
+	int currentRowNum = 0;
+	int currentColNum = 0;
+	Node* pickedNode = nullptr;
+	Node* northNode = nullptr;
+	Node* southNode = nullptr;
+	Node* westNode = nullptr;
+	Node* eastNode = nullptr;
+	toEast = true;
+
+	// getNorth Node, ousth node, west node east node of picked node;
+	while (pTmp != nullptr)
+	{
+		//	Trace::out("currentRowNum, currentColNum %d %d\n ", currentRowNum, currentColNum);
+		if (currentRowNum == row && currentColNum == col)
+		{
+			pickedNode = pTmp;
+			//	Trace::out(" east %d\n", pickedNode->pEast);
+		}
+		if (currentRowNum == row - 1 && currentColNum == col && row >= 1)
+		{
+			northNode = pTmp;
+		}
+		if (currentRowNum == row + 1 && currentColNum == col && row <= rowNum - 1)
+		{
+			southNode = pTmp;
+		}
+		if (currentRowNum == row && currentColNum == col - 1 && col >= 1)
+		{
+			westNode = pTmp;
+		}
+		if (currentRowNum == row && currentColNum == col + 1 && col <= colNum - 1)
+		{
+			eastNode = pTmp;
+		}
+
+		if (toEast) {
+			if (pTmp->pEast != nullptr)
+			{
+				pTmp = pTmp->pEast;
+				currentColNum++;
+			}
+			else {
+				pTmp = pTmp->pSouth;
+				toEast = false;
+				currentRowNum++;
+			}
+		}
+		else {
+			if (pTmp->pWest != nullptr) {
+				pTmp = pTmp->pWest;
+				currentColNum--;
+			}
+			else {
+				pTmp = pTmp->pSouth;
+				toEast = true;
+				currentRowNum++;
+			}
+		}
+
+
+
+	}
+	//bool rowEvens = false;
+	//bool colEvens = false;
+	//int reminder = col % 2;
+	//if (reminder == 0)
+	//{
+	//	colEvens = true;
+	//}
+	//reminder = row % 2;
+	//if (reminder == 0)
+	//{
+	//	rowEvens = true;
+	//}
+	/*delete(pickedNode);*/
+
+	// 0, 0
+	if (row == 0 && col == 0) {
+		if (southNode) {
+			pickedNode->pEast = nullptr;
+			pickedNode = nullptr;
+		}
+		southNode->pNorth = nullptr;
+	}
+
+}
